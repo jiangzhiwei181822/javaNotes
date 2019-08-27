@@ -1,0 +1,758 @@
+启动数据库
+windows键+R
+运行窗口输入cmd
+mysql -uroot -p
+u:指定用户名
+p:指定密码123465
+
+1.1查看数据库
+show databases;
+
+1.2进入数据库
+use 数据库名称;
+
+1.3查看数据表
+show tables;
+
+1.4退出数据库
+quit;
+\q
+
+2.1 创建数据库
+create database mydb2 
+2.2查看建库语句
+show create database mydb;
+2.3删除数据库
+drop database mydb1;
+
+3.1创建表
+create database db1 charset utf8;
+
+create table tb1(
+id tinyint auto_increment key,
+name varchar(10) not null,
+gender char(1) not null
+)engine=innodb charset=utf8;
+
+3.2查看表
+desc tb1;
+
+查看建表语句
+show create table tb1;
+
+4.1改表名
+rename table tb1 to user;
+rename table user to tb1;
+rename table tb1 to user;
+
+4.2添加字段
+alter table 数据库名称 add 字段名称;
+
+alter table user add email varchar(20) first;
+
+alter table user add password varchar(12) after id;
+
+alter table user add(score tinyint , price tinyint);
+
+4.3修改字段名称
+alter table 数据库名称 change 字段名称 新的字段名称 新的类型;
+alter table user change email address varchar(20);
+alter table user change address email varchar(10);
+alter table user change email address int(11)
+
+4.4修改字段类型
+alter table 数据库名称 modify 字段名称 新的类型
+alter table user modify address varchar(20);
+alter table user modify address int(2);
+
+4.5修改字段顺序
+alter table user modify id int(3) first;
+alter table user modify age tinyint(4) after id;
+
+4.6删除字段
+alter table user drop sex;
+
+4.7删除表
+drop table if exists user;
+
+/* 通知服务器客服端使用的编码 */
+set names gbk;
+/* 创建表 */
+create table user(
+id tinyint(10) auto_increment key comment '编号',
+name varchar(10) not null comment '姓名',
+address varchar(20) not null comment '地址'
+)engine=innodb charset=utf8;
+/* 添加数据 */
+insert user values(null,'小红','北京'),(default,'小明','深圳'),(5,'小黑','广州');
+
+insert into user values(null,'小白','广州');
+
+  id '编号',name '姓名' from user;
+
+create table tb1(
+a varchar(10)
+)engine=innodb charset=utf8;
+
+insert into tb1 values('\'');
+insert into tb1 values("小花猫");
+
+5.2 update 修改数据
+update user set id=4 where id=5;
+
+5.3 delete 删除数据
+delete from user where id = 6;
+
+5.4   查询数据
+  * from user;星号代表全部
+
+   name from user;
+
+  name,address from user; 
+
+/* 练习 */
+
+1.创建数据库db2,在db2内创建表格tb1包含以下两个字段
+name varchar(10),
+email varchar(10)
+
+2.修改tb1表格名称为user
+
+3.向user表插入两个字段分别是
+id int
+phone int
+
+4.将id字段位置调整为第一个字段
+
+5.将phone字段类型修改为varchar(10);
+
+create database db2 charset utf8;
+
+use db2;
+
+create table tb1(
+name varchar(10),
+email varchar(10)
+)engine=innodb charset=utf8;
+
+rename table tb1 to user;
+
+alter table user add(id int,phone int);
+
+alter table user modify id int first;/* 字段后面需要加类型才能修改成功 */
+
+alter table user modify phone varchar(10);
+
+
+
+/*复制表结构跟表数据*/
+
+create table user2   * from user;
+
+create table user3   * from user where 1=2;
+
+create table user4 like user;
+
+insert into user4   * from user;
+
+
+update user4 set id=7,name="大名鼎鼎" where id=1;
+
+
+练习：
+1.在db2数据库内创建表格tb2，包含以下字段
+id int,
+name varchar(10),
+salary int
+
+2.向tb2表插入如下数据
+(1,'张三',6000),
+(2,'李四',8000),
+(3,'王五',7300),
+(1,'赵六',12000),
+
+3.将id为1的数据修改为(5,'钱七',9500)
+
+4.删除id大于3的数据
+
+create table tb2( 
+id int auto_increment key comment '编号',
+name varchar(10) not null comment '姓名',
+salary int not null comment '工资'
+)engine=innodb charset=utf8;
+
+insert into tb2 values(null,'张三',6000),(null,'李四',8000),
+(null,'王五',7300),(null,'赵六',12000);
+
+update tb2 set id=5,name='钱七',salary=9500 where id=1;
+
+delete from tb2 where id>3;
+
+insert into tb2 values(2,"孙八",5000);
+
+1.comment 添加注释
+创建表格时添加注释
+create table tb3(
+id int comment '编号',
+name varchar(10) comment '姓名',
+salary int comment '薪水',
+email varchar(20)
+)engine=innodb charset=utf8;
+
+查看建表语句
+show create table tb3;
+
+alter table tb3 modify email varchar(20) comment '邮箱';
+
+
+/* 导入sql文件 */
+source D:/hr_mysql.sql
+
+where查询
+ = <>
+ > >= < <=
+ between 小 and 大
+ in(...)在一组指定值中取值
+ is null 为空
+ like 字符模糊查询
+	通配符：
+		_:单个字符
+		%:多个字符
+ not 
+	not between and
+	not in(...)
+	is not null
+	not like
+and与，并且 or或者
+
+1.查询员工id,薪水,名字
+  employee_id,salary,first_name from employees;
+2.查询员工id为123的员工
+  employee_id,salary,first_name from employees where employee_id=123;
+3.不在80部门的员工
+  employee_id,salary,first_name,department_id from employees where department_id<>80;
+
+  employee_id,salary,first_name,department_id from employees where department_id!=80;
+
+4.工资小于5000的员工
+  employee_id,first_name,salary from employees where salary<5000;
+
+5.工资在5000到10000
+  employee_id,first_name,salary from employees where salary between 5000 and 10000;
+
+6.主管id是100,101,102
+  employee_id,first_name,manager_id from employees where manager_id in(100,101,102);
+
+7.没有主管的人
+  employee_id,salary,first_name from employees where manager_id is null;
+
+8.名字中包含'en'
+  employee_id,first_name,salary from employees where first_name like '%en%';
+
+9.第三，第四个字符包含'en',
+  employee_id,salary,first_name from employees where first_name like '__en%';
+	
+10.查询工资小于5000或者大于10000的人
+  employee_id,salary,first_name from employees where salary not between 5000 and 10000;	
+	
+	+----------------+--------------+------+-----+---------+----------------+
+| Field          | Type         | Null | Key | Default | Extra          |
++----------------+--------------+------+-----+---------+----------------+
+| employee_id    | int(6)       | NO   | PRI | NULL    | auto_increment |
+| first_name     | varchar(20)  | YES  |     | NULL    |                |
+| last_name      | varchar(25)  | NO   |     | NULL    |                |
+| email          | varchar(25)  | NO   | UNI | NULL    |                |
+| phone_number   | varchar(20)  | YES  |     | NULL    |                |
+| hire_date      | date         | NO   |     | NULL    |                |
+| job_id         | varchar(10)  | NO   | MUL | NULL    |                |
+| salary         | decimal(8,2) | YES  |     | NULL    |                |
+| commission_pct | decimal(2,2) | YES  |     | NULL    |                |
+| manager_id     | int(6)       | YES  | MUL | NULL    |                |
+| department_id  | int(4)       | YES  | MUL | NULL    |                |
++----------------+--------------+------+-----+---------+----------------+
+	
+练习：
+1.first_name是Vance的员工
+2.薪水小于等于8000并且是100部门的
+3.job id为'IT_PROG','AD_VP','AD_PRES'
+4.90部门所有员工，或者岗位id后缀是'CLERK'
+5.没有部门的员工
+6.没有销售提成的员工
+7.first_name以El开头的
+8.90部门所有员工,或者50部门中工资小于等于2500
+
+  employee_id,first_name,salary from employees where first_name = 'Vance';
+  employee_id,first_name,salary from employees where first_name like 'Vance';
+
+  employee_id,first_name,salary,department_id from employees where salary <=8000 and department_id = 100;
+
+  employee_id,first_name,salary,job_id from employees where job_id in('IT_PROG','AD_VP','AD_PRES');
+
+  employee_id,first_name,department_id,job_id from employees where department_id=90 or job_id like '%CLERK';		
+
+  employee_id,first_name,department_id from employees where department_id is null;
+
+  employee_id,first_name,commission_pct from employees where commission_pct is null;
+
+  employee_id,first_name from employees where first_name like 'El%';
+
+  employee_id,first_name,department_id,salary from employees where department_id=90 or (department_id=50 and salary<=2500);
+
+insert的使用
+create table user(
+name varchar(20),
+salary int
+)engine=innodb charset=utf8;
+
+insert into user(name)   first_name from employees;
+
+insert into user   first_name,salary from employees;
+
+delete from user where salary is null; 
+
+自表数据复制
+create table tb1(
+id int,
+name varchar(10)
+)engine=innodb charset=utf8;
+
+insert into tb1 values(1,'小明'),(2,'小黑');
+
+insert into tb1   * from tb1;
+
+create table tb2   * from tb1;
+
+distinct 去除重复数据
+
+  department_id from employees;
+
+  distinct department_id from employees;
+
+  distinct department_id from employees where department_id is not null;
+
+order by 排序
+/*按a字段升序排序 */
+order by a
+
+/* 按a字段升序排序,a字段相同b字段升序 */
+order by a,b;
+
+asc升序
+desc降序
+order a desc,b
+
+员工薪水升序排序
+  first_name,salary from employees order by salary;
+
+按部门升序,相同部门按工资降序
+  first_name,department_id,salary from employees order by department_id,salary desc;
+
+练习：
+1.有销售提成的员工
+2.电话中包含'88'
+3.排除部门50,80,100;
+4.工作岗位为'IT_PROG',或100部门中工资大于5000
+5.所有manager_id(去重复)
+6.50部门的员工,按工资降序
+7.岗位后缀是'CLERK'，按主管ID升序,相同主管按工资降序
+
+  first_name,commission_pct from employees where commission_pct is not null;
+
+  first_name,phone_number from employees where phone_number like '%88%';
+
+  first_name,department_id from employees where department_id not in(50,80,100);
+
+  first_name,job_id,salary from employees where job_id = 'IT_PROG' or (department_id =100 and salary>5000);
+
+  distinct manager_id from employees where manager_id is not null;;
+
+  department_id,salary from employees where department_id =50 order by salary desc;
+
+  job_id,manager_id,salary from employees where job_id like '%CLERK' order by manager_id,salary desc;
+
+insert into tb1 value(3,null),(4,null);
+
+
+create table Student(	/* 学生表 */
+s int comment '学生编号',
+sname varchar(32) comment '学生姓名',
+sage int comment '学生年龄',
+ssex varchar(8) comment '学生性别'
+)engine=innodb charset=utf8;
+
+create table course(   /* 课程表 */
+c int comment '课程id',
+cname varchar(32) comment '课程名称',
+t int comment '老师id'
+)engine=innodb charset=utf8;
+
+create table sc(   /* 成绩表 */
+s int comment '学生id',
+c int comment '课程id',
+score int comment '成绩'
+)engine=innodb charset=utf8;
+
+create table teacher(  /* 教师表 */
+t int comment '老师id',  
+tname varchar(16) comment '老师姓名'
+)engine=innodb charset=utf8;
+
+insert into student values(1,'刘一',18,'男'),(2,'钱二',19,'女'),(3,'张三',17,'男'),
+(4,'李四',18,'女'),(5,'王五',17,'男'),(6,'赵六',19,'女');
+
+insert into teacher values(1,'叶平'),(2,'贺高'),(3,'杨艳'),(4,'周磊');
+
+insert into course values(1,'语文',1),(2,'数学',2),(3,'英语',3),(4,'物理',4);
+
+insert into sc values(1,1,56),    
+(1,2,78   ),   
+(1,3,67 ),     
+(1,4,58 ),     
+(2,1,79 ),     
+(2,2,81   ),   
+(2,3,92 ),     
+( 2,4,68 ),     
+( 3,1,91 ),     
+( 3,2,47 ),     
+( 3,3,88 ),     
+( 3,4,56 ),    
+( 4,2,88 ),     
+( 4,3,90 ),     
+( 4,4,93 ),     
+(  5,1,46 ),     
+( 5,3,78 ),     
+( 5,4,53 ),     
+( 6,1,35 ),     
+( 6,2,68 ),     
+(  6,4,71);
+
+5、查询没学过“叶平”老师课的同学的学号、姓名； 
+ 
+
+
+
+select sc.s '学生ID',stc.sname '学生姓名' from 
+(select t.t,t.tname,c.c from teacher as t join course as c on t.t = c.t where t.tname not in ("叶平")) as ts,
+(select s.s,sc.c from student as s join sc on s.s = sc.s) as stc where sc.c = c.c; 
+
+查询“001”课程比“002”课程成绩高的所有学生的学号； 
+首先查询001课程所有学生的成绩及学号
+select sc.s,sc.score,sc.c from sc where sc.c=1;
++------+-------+------+
+| s    | score | c    |
++------+-------+------+
+|    1 |    56 |    1 |
+|    2 |    79 |    1 |
+|    3 |    91 |    1 |
+|    5 |    46 |    1 |
+|    6 |    35 |    1 |
++------+-------+------+
+再查询002课程所有学生的成绩及学号
+select sc.s,sc.score,sc.c from sc where sc.c=2;
++------+-------+------+
+| s    | score | c    |
++------+-------+------+
+|    1 |    78 |    2 |
+|    2 |    81 |    2 |
+|    3 |    47 |    2 |
+|    4 |    88 |    2 |
+|    6 |    68 |    2 |
++------+-------+------+
+
+
+select a.s as '学生' from (select sc.s,sc.score from sc where sc.c=1) as a,
+(select sc.s,sc.score from sc where sc.c=2) as b where a.score>b.score and a.s=b.s;
+
+
+
+
+
+  select a.S# from (select s#,score from SC where C#='001') a,(select s#,score 
+  from SC where C#='002') b 
+  where a.score>b.score and a.s#=b.s#; 
+2、查询平均成绩大于60分的同学的学号和平均成绩；
+ 
+ select sc.s,avg(sc.score) from sc group by sc.s having avg(sc.score)>60;
+ 
+  select sc.s,avg(sc.score) from sc where avg(sc.score)>60;
+ 
+ 
+ 
+ 
+ 
+ 
+    select S#,avg(score) 
+    from sc 
+    group by S# having avg(score) >60; 
+3、查询所有同学的学号、姓名、选课数、总成绩； 
+
+select stu.s,stu.sname,count(sc.c),sum(sc.score) from student as stu left 
+join sc on stu.s=sc.s group by stu.s;
+
+select s,sname from student;
+
+select * from sc;
+
+
+
+  select Student.S#,Student.Sname,count(SC.C#),sum(score) 
+  from Student left Outer join SC on Student.S#=SC.S# 
+  group by Student.S#,Sname 
+4、查询姓“李”的老师的个数； 
+
+
+
+
+  select count(distinct(Tname)) 
+  from Teacher 
+  where Tname like '李%'; 
+5、查询没学过“叶平”老师课的同学的学号、姓名； 
+
+select s.s '学生ID',s.sname '学生姓名' from (select t.t,t.tname from teacher join course
+
+
+
+
+
+    select Student.S#,Student.Sname 
+    from Student  
+    where S# not in (select distinct( SC.S#) from SC,Course,Teacher where  SC.C#=Course.C# and Teacher.T#=Course.T# and Teacher.Tname='叶平'); 
+6、查询学过“001”并且也学过编号“002”课程的同学的学号、姓名； 
+  select Student.S#,Student.Sname from Student,SC where Student.S#=SC.S# and SC.C#='001'and exists( Select * from SC as SC_2 where SC_2.S#=SC.S# and SC_2.C#='002'); 
+7、查询学过“叶平”老师所教的所有课的同学的学号、姓名； 
+  select S#,Sname 
+  from Student 
+  where S# in (select S# from SC ,Course ,Teacher where SC.C#=Course.C# and Teacher.T#=Course.T# and Teacher.Tname='叶平' group by S# having count(SC.C#)=(select count(C#) from Course,Teacher  where Teacher.T#=Course.T# and Tname='叶平')); 
+8、查询课程编号“002”的成绩比课程编号“001”课程低的所有同学的学号、姓名； 
+  Select S#,Sname from (select Student.S#,Student.Sname,score ,(select score from SC SC_2 where SC_2.S#=Student.S# and SC_2.C#='002') score2 
+  from Student,SC where Student.S#=SC.S# and C#='001') S_2 where score2 <score; 
+9、查询所有课程成绩小于60分的同学的学号、姓名； 
+  select S#,Sname 
+  from Student 
+  where S# not in (select S.S# from Student AS S,SC where S.S#=SC.S# and score>60); 
+10、查询没有学全所有课的同学的学号、姓名； 
+    select Student.S#,Student.Sname 
+    from Student,SC 
+    where Student.S#=SC.S# group by  Student.S#,Student.Sname having count(C#) <(select count(C#) from Course); 
+11、查询至少有一门课与学号为“1001”的同学所学相同的同学的学号和姓名； 
+    select distinct S#,Sname from Student,SC where Student.S#=SC.S# and SC.C# in (select C# from SC where S#='1001'); 
+12、查询至少学过学号为“001”同学所有一门课的其他同学学号和姓名； 
+    select distinct SC.S#,Sname 
+    from Student,SC 
+    where Student.S#=SC.S# and C# in (select C# from SC where S#='001'); 
+13、把“SC”表中“叶平”老师教的课的成绩都更改为此课程的平均成绩； 
+    update SC set score=(select avg(SC_2.score) 
+    from SC SC_2 
+    where SC_2.C#=SC.C# ) from Course,Teacher where Course.C#=SC.C# and Course.T#=Teacher.T# and Teacher.Tname='叶平'); 
+14、查询和“1002”号的同学学习的课程完全相同的其他同学学号和姓名； 
+    select S# from SC where C# in (select C# from SC where S#='1002') 
+    group by S# having count(*)=(select count(*) from SC where S#='1002'); 
+15、删除学习“叶平”老师课的SC表记录； 
+    Delect SC 
+    from course ,Teacher  
+    where Course.C#=SC.C# and Course.T#= Teacher.T# and Tname='叶平'; 
+16、向SC表中插入一些记录，这些记录要求符合以下条件：没有上过编号“003”课程的同学学号、2、 
+    号课的平均成绩； 
+    Insert SC select S#,'002',(Select avg(score) 
+    from SC where C#='002') from Student where S# not in (Select S# from SC where C#='002'); 
+17、按平均成绩从高到低显示所有学生的“数据库”、“企业管理”、“英语”三门的课程成绩，按如下形式显示： 学生ID,,数据库,企业管理,英语,有效课程数,有效平均分 
+    SELECT S# as 学生ID 
+        ,(SELECT score FROM SC WHERE SC.S#=t.S# AND C#='004') AS 数据库 
+        ,(SELECT score FROM SC WHERE SC.S#=t.S# AND C#='001') AS 企业管理 
+        ,(SELECT score FROM SC WHERE SC.S#=t.S# AND C#='006') AS 英语 
+        ,COUNT(*) AS 有效课程数, AVG(t.score) AS 平均成绩 
+    FROM SC AS t 
+    GROUP BY S# 
+    ORDER BY avg(t.score)  
+18、查询各科成绩最高和最低的分：以如下形式显示：课程ID，最高分，最低分 
+    SELECT L.C# As 课程ID,L.score AS 最高分,R.score AS 最低分 
+    FROM SC L ,SC AS R 
+    WHERE L.C# = R.C# and 
+        L.score = (SELECT MAX(IL.score) 
+                      FROM SC AS IL,Student AS IM 
+                      WHERE L.C# = IL.C# and IM.S#=IL.S# 
+                      GROUP BY IL.C#) 
+        AND 
+        R.Score = (SELECT MIN(IR.score) 
+                      FROM SC AS IR 
+                      WHERE R.C# = IR.C# 
+                  GROUP BY IR.C# 
+                    ); 
+自己写的:select c# ,max(score)as 最高分 ,min(score) as 最低分 from dbo.sc  group by c#
+19、按各科平均成绩从低到高和及格率的百分数从高到低顺序 
+    SELECT t.C# AS 课程号,max(course.Cname)AS 课程名,isnull(AVG(score),0) AS 平均成绩 
+        ,100 * SUM(CASE WHEN  isnull(score,0)>=60 THEN 1 ELSE 0 END)/COUNT(*) AS 及格百分数 
+    FROM SC T,Course 
+    where t.C#=course.C# 
+    GROUP BY t.C# 
+    ORDER BY 100 * SUM(CASE WHEN  isnull(score,0)>=60 THEN 1 ELSE 0 END)/COUNT(*) DESC 
+20、查询如下课程平均成绩和及格率的百分数(用"1行"显示): 企业管理（001），马克思（002），OO&UML （003），数据库（004） 
+    SELECT SUM(CASE WHEN C# ='001' THEN score ELSE 0 END)/SUM(CASE C# WHEN '001' THEN 1 ELSE 0 END) AS 企业管理平均分 
+        ,100 * SUM(CASE WHEN C# = '001' AND score >= 60 THEN 1 ELSE 0 END)/SUM(CASE WHEN C# = '001' THEN 1 ELSE 0 END) AS 企业管理及格百分数 
+        ,SUM(CASE WHEN C# = '002' THEN score ELSE 0 END)/SUM(CASE C# WHEN '002' THEN 1 ELSE 0 END) AS 马克思平均分 
+        ,100 * SUM(CASE WHEN C# = '002' AND score >= 60 THEN 1 ELSE 0 END)/SUM(CASE WHEN C# = '002' THEN 1 ELSE 0 END) AS 马克思及格百分数 
+        ,SUM(CASE WHEN C# = '003' THEN score ELSE 0 END)/SUM(CASE C# WHEN '003' THEN 1 ELSE 0 END) AS UML平均分 
+        ,100 * SUM(CASE WHEN C# = '003' AND score >= 60 THEN 1 ELSE 0 END)/SUM(CASE WHEN C# = '003' THEN 1 ELSE 0 END) AS UML及格百分数 
+        ,SUM(CASE WHEN C# = '004' THEN score ELSE 0 END)/SUM(CASE C# WHEN '004' THEN 1 ELSE 0 END) AS 数据库平均分 
+        ,100 * SUM(CASE WHEN C# = '004' AND score >= 60 THEN 1 ELSE 0 END)/SUM(CASE WHEN C# = '004' THEN 1 ELSE 0 END) AS 数据库及格百分数 
+  FROM SC 
+复制代码
+复制代码
+21、查询不同老师所教不同课程平均分从高到低显示 
+  SELECT max(Z.T#) AS 教师ID,MAX(Z.Tname) AS 教师姓名,C.C# AS 课程ＩＤ,MAX(C.Cname) AS 课程名称,AVG(Score) AS 平均成绩 
+    FROM SC AS T,Course AS C ,Teacher AS Z 
+    where T.C#=C.C# and C.T#=Z.T# 
+  GROUP BY C.C# 
+  ORDER BY AVG(Score) DESC 
+22、查询如下课程成绩第 3 名到第 6 名的学生成绩单：企业管理（001），马克思（002），UML （003），数据库（004） 
+    [学生ID],[学生姓名],企业管理,马克思,UML,数据库,平均成绩 
+    SELECT  DISTINCT top 3 
+      SC.S# As 学生学号, 
+        Student.Sname AS 学生姓名 , 
+      T1.score AS 企业管理, 
+      T2.score AS 马克思, 
+      T3.score AS UML, 
+      T4.score AS 数据库, 
+      ISNULL(T1.score,0) + ISNULL(T2.score,0) + ISNULL(T3.score,0) + ISNULL(T4.score,0) as 总分 
+      FROM Student,SC  LEFT JOIN SC AS T1 
+                      ON SC.S# = T1.S# AND T1.C# = '001' 
+            LEFT JOIN SC AS T2 
+                      ON SC.S# = T2.S# AND T2.C# = '002' 
+            LEFT JOIN SC AS T3 
+                      ON SC.S# = T3.S# AND T3.C# = '003' 
+            LEFT JOIN SC AS T4 
+                      ON SC.S# = T4.S# AND T4.C# = '004' 
+      WHERE student.S#=SC.S# and 
+      ISNULL(T1.score,0) + ISNULL(T2.score,0) + ISNULL(T3.score,0) + ISNULL(T4.score,0) 
+      NOT IN 
+      (SELECT 
+            DISTINCT 
+            TOP 15 WITH TIES 
+            ISNULL(T1.score,0) + ISNULL(T2.score,0) + ISNULL(T3.score,0) + ISNULL(T4.score,0) 
+      FROM sc 
+            LEFT JOIN sc AS T1 
+                      ON sc.S# = T1.S# AND T1.C# = 'k1' 
+            LEFT JOIN sc AS T2 
+                      ON sc.S# = T2.S# AND T2.C# = 'k2' 
+            LEFT JOIN sc AS T3 
+                      ON sc.S# = T3.S# AND T3.C# = 'k3' 
+            LEFT JOIN sc AS T4 
+                      ON sc.S# = T4.S# AND T4.C# = 'k4' 
+      ORDER BY ISNULL(T1.score,0) + ISNULL(T2.score,0) + ISNULL(T3.score,0) + ISNULL(T4.score,0) DESC); 
+
+23、统计列印各科成绩,各分数段人数:课程ID,课程名称,[100-85],[85-70],[70-60],[ <60] 
+    SELECT SC.C# as 课程ID, Cname as 课程名称 
+        ,SUM(CASE WHEN score BETWEEN 85 AND 100 THEN 1 ELSE 0 END) AS [100 - 85] 
+        ,SUM(CASE WHEN score BETWEEN 70 AND 85 THEN 1 ELSE 0 END) AS [85 - 70] 
+        ,SUM(CASE WHEN score BETWEEN 60 AND 70 THEN 1 ELSE 0 END) AS [70 - 60] 
+        ,SUM(CASE WHEN score < 60 THEN 1 ELSE 0 END) AS [60 -] 
+    FROM SC,Course 
+    where SC.C#=Course.C# 
+    GROUP BY SC.C#,Cname; 
+
+24、查询学生平均成绩及其名次 
+      SELECT 1+(SELECT COUNT( distinct 平均成绩) 
+              FROM (SELECT S#,AVG(score) AS 平均成绩 
+                      FROM SC 
+                  GROUP BY S# 
+                  ) AS T1 
+            WHERE 平均成绩 > T2.平均成绩) as 名次, 
+      S# as 学生学号,平均成绩 
+    FROM (SELECT S#,AVG(score) 平均成绩 
+            FROM SC 
+        GROUP BY S# 
+        ) AS T2 
+    ORDER BY 平均成绩 desc; 
+  
+25、查询各科成绩前三名的记录:(不考虑成绩并列情况) 
+      SELECT t1.S# as 学生ID,t1.C# as 课程ID,Score as 分数 
+      FROM SC t1 
+      WHERE score IN (SELECT TOP 3 score 
+              FROM SC 
+              WHERE t1.C#= C# 
+            ORDER BY score DESC 
+              ) 
+      ORDER BY t1.C#; 
+26、查询每门课程被选修的学生数 
+  select c#,count(S#) from sc group by C#; 
+27、查询出只选修了一门课程的全部学生的学号和姓名 
+  select SC.S#,Student.Sname,count(C#) AS 选课数 
+  from SC ,Student 
+  where SC.S#=Student.S# group by SC.S# ,Student.Sname having count(C#)=1; 
+28、查询男生、女生人数 
+    Select count(Ssex) as 男生人数 from Student group by Ssex having Ssex='男'; 
+    Select count(Ssex) as 女生人数 from Student group by Ssex having Ssex='女'； 
+29、查询姓“张”的学生名单 
+    SELECT Sname FROM Student WHERE Sname like '张%'; 
+30、查询同名同性学生名单，并统计同名人数 
+  select Sname,count(*) from Student group by Sname having  count(*)>1;; 
+31、1981年出生的学生名单(注：Student表中Sage列的类型是datetime) 
+    select Sname,  CONVERT(char (11),DATEPART(year,Sage)) as age 
+    from student 
+    where  CONVERT(char(11),DATEPART(year,Sage))='1981'; 
+32、查询每门课程的平均成绩，结果按平均成绩升序排列，平均成绩相同时，按课程号降序排列 
+    Select C#,Avg(score) from SC group by C# order by Avg(score),C# DESC ; 
+33、查询平均成绩大于85的所有学生的学号、姓名和平均成绩 
+    select Sname,SC.S# ,avg(score) 
+    from Student,SC 
+    where Student.S#=SC.S# group by SC.S#,Sname having    avg(score)>85; 
+34、查询课程名称为“数据库”，且分数低于60的学生姓名和分数 
+    Select Sname,isnull(score,0) 
+    from Student,SC,Course 
+    where SC.S#=Student.S# and SC.C#=Course.C# and  Course.Cname='数据库'and score <60; 
+35、查询所有学生的选课情况； 
+    SELECT SC.S#,SC.C#,Sname,Cname 
+    FROM SC,Student,Course 
+    where SC.S#=Student.S# and SC.C#=Course.C# ; 
+36、查询任何一门课程成绩在70分以上的姓名、课程名称和分数； 
+    SELECT  distinct student.S#,student.Sname,SC.C#,SC.score 
+    FROM student,Sc 
+    WHERE SC.score>=70 AND SC.S#=student.S#; 
+37、查询不及格的课程，并按课程号从大到小排列 
+    select c# from sc where scor e <60 order by C# ; 
+38、查询课程编号为003且课程成绩在80分以上的学生的学号和姓名； 
+    select SC.S#,Student.Sname from SC,Student where SC.S#=Student.S# and Score>80 and C#='003'; 
+39、求选了课程的学生人数 
+    select count(*) from sc; 
+40、查询选修“叶平”老师所授课程的学生中，成绩最高的学生姓名及其成绩 
+    select Student.Sname,score 
+    from Student,SC,Course C,Teacher 
+    where Student.S#=SC.S# and SC.C#=C.C# and C.T#=Teacher.T# and Teacher.Tname='叶平' and SC.score=(select max(score)from SC where C#=C.C# ); 
+41、查询各个课程及相应的选修人数 
+    select count(*) from sc group by C#; 
+42、查询不同课程成绩相同的学生的学号、课程号、学生成绩 
+  select distinct  A.S#,B.score from SC A  ,SC B where A.Score=B.Score and A.C# <>B.C# ; 
+43、查询每门功成绩最好的前两名 
+    SELECT t1.S# as 学生ID,t1.C# as 课程ID,Score as 分数 
+      FROM SC t1 
+      WHERE score IN (SELECT TOP 2 score 
+              FROM SC 
+              WHERE t1.C#= C# 
+            ORDER BY score DESC 
+              ) 
+      ORDER BY t1.C#; 
+44、统计每门课程的学生选修人数（超过10人的课程才统计）。要求输出课程号和选修人数，查询结果按人数降序排列，查询结果按人数降序排列，若人数相同，按课程号升序排列  
+    select  C# as 课程号,count(*) as 人数 
+    from  sc  
+    group  by  C# 
+    order  by  count(*) desc,c#  
+45、检索至少选修两门课程的学生学号 
+    select  S#  
+    from  sc  
+    group  by  s# 
+    having  count(*)  >  =  2 
+46、查询全部学生都选修的课程的课程号和课程名 
+    select  C#,Cname  
+    from  Course  
+    where  C#  in  (select  c#  from  sc group  by  c#)  
+47、查询没学过“叶平”老师讲授的任一门课程的学生姓名 
+    select Sname from Student where S# not in (select S# from Course,Teacher,SC where Course.T#=Teacher.T# and SC.C#=course.C# and Tname='叶平'); 
+48、查询两门以上不及格课程的同学的学号及其平均成绩 
+    select S#,avg(isnull(score,0)) from SC where S# in (select S# from SC where score <60 group by S# having count(*)>2)group by S#; 
+49、检索“004”课程分数小于60，按分数降序排列的同学学号 
+    select S# from SC where C#='004'and score <60 order by score desc; 
+50、删除“002”同学的“001”课程的成绩 
+delete from Sc where S#='001'and C#='001'; 
+
+
+
